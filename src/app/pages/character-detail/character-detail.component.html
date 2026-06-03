@@ -1,0 +1,60 @@
+@if (state$ | async; as state) {
+  @if (state.loading) {
+    <app-loader />
+  } @else if (state.error || !state.character) {
+    <app-error-message [message]="state.error ?? 'Erreur'" (retry)="reload()" />
+  } @else {
+    @if (state.character; as c) {
+      <article class="detail">
+        <div class="detail__hero">
+          <img [src]="c.image" [alt]="c.name" />
+          <div>
+            <h1>{{ c.name }}</h1>
+            <p>{{ c.status | status }} · {{ c.species }} · {{ c.gender }}</p>
+            <button
+              type="button"
+              class="btn"
+              (click)="toggleFavori(c)"
+            >
+              {{ favorisService.isFavori(c.id) ? '★ Retirer des favoris' : '☆ Ajouter aux favoris' }}
+            </button>
+          </div>
+        </div>
+
+        <section class="detail__section">
+          <h2>Origine &amp; lieu actuel</h2>
+          <ul class="links-list">
+            <li>
+              Origine :
+              @if (state.originId) {
+                <a [routerLink]="['/locations', state.originId]">{{ c.origin.name }}</a>
+              } @else {
+                {{ c.origin.name }}
+              }
+            </li>
+            <li>
+              Lieu actuel :
+              @if (state.locationId) {
+                <a [routerLink]="['/locations', state.locationId]">{{ c.location.name }}</a>
+              } @else {
+                {{ c.location.name }}
+              }
+            </li>
+          </ul>
+        </section>
+
+        <section class="detail__section">
+          <h2>Épisodes ({{ state.episodes.length }})</h2>
+          <div class="episode-grid">
+            @for (ep of state.episodes; track ep.id) {
+              <a [routerLink]="['/episodes', ep.id]" class="episode-card">
+                <strong>{{ ep.episode }}</strong>
+                <span>{{ ep.name }}</span>
+              </a>
+            }
+          </div>
+        </section>
+      </article>
+    }
+  }
+}

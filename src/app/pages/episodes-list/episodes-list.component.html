@@ -1,0 +1,29 @@
+<h1>Épisodes</h1>
+
+@if (state$ | async; as state) {
+  @if (state.loading) {
+    <app-loader />
+  } @else if (state.error) {
+    <app-error-message [message]="state.error" (retry)="reload()" />
+  } @else {
+    <ul class="list">
+      @for (ep of state.episodes; track ep.id) {
+        <li>
+          <a [routerLink]="['/episodes', ep.id]" class="list-item">
+            <span class="code">{{ ep.episode }}</span>
+            <h3>{{ ep.name }}</h3>
+            <p>{{ ep.air_date | truncate:40 }}</p>
+          </a>
+        </li>
+      }
+    </ul>
+    @if (state.info) {
+      <app-paginator
+        [currentPage]="currentPage()"
+        [totalPages]="state.info.pages"
+        (prev)="prevPage()"
+        (next)="nextPage()"
+      />
+    }
+  }
+}

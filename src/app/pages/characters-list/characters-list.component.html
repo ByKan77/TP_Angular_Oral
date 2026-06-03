@@ -1,0 +1,42 @@
+<h1>Personnages</h1>
+<p class="badge-graphql">Liste chargée via GraphQL (bonus)</p>
+
+<div class="filters">
+  <app-search-bar (searchChange)="onSearch($event)" />
+  <label class="filter-status">
+    <span>Statut</span>
+    <select class="input" (change)="onStatusChange($event)">
+      <option value="">Tous</option>
+      <option value="alive">Vivant</option>
+      <option value="dead">Mort</option>
+      <option value="unknown">Inconnu</option>
+    </select>
+  </label>
+</div>
+
+@if (state$ | async; as state) {
+  @if (state.loading) {
+    <app-loader />
+  } @else if (state.error) {
+    <app-error-message [message]="state.error" (retry)="reload()" />
+  } @else {
+    <div class="grid">
+      @for (c of state.characters; track c.id) {
+        <app-character-card
+          [character]="c"
+          (toggleFavori)="onToggleFavori($event)"
+        />
+      } @empty {
+        <p class="empty">Aucun personnage trouvé.</p>
+      }
+    </div>
+    @if (state.info) {
+      <app-paginator
+        [currentPage]="currentPage()"
+        [totalPages]="state.info.pages"
+        (prev)="prevPage()"
+        (next)="nextPage()"
+      />
+    }
+  }
+}

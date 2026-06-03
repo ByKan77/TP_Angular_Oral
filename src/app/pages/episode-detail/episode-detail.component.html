@@ -1,0 +1,27 @@
+@if (state$ | async; as state) {
+  @if (state.loading) {
+    <app-loader />
+  } @else if (state.error || !state.episode) {
+    <app-error-message [message]="state.error ?? 'Erreur'" (retry)="reload()" />
+  } @else {
+    @if (state.episode; as ep) {
+      <header class="detail-header">
+        <span class="code">{{ ep.episode }}</span>
+        <h1>{{ ep.name }}</h1>
+        <p>Diffusion : {{ ep.air_date }}</p>
+      </header>
+
+      <section>
+        <h2>Personnages ({{ state.characters.length }})</h2>
+        <div class="grid">
+          @for (c of state.characters; track c.id) {
+            <app-character-card
+              [character]="c"
+              (toggleFavori)="favorisService.toggle($event)"
+            />
+          }
+        </div>
+      </section>
+    }
+  }
+}

@@ -1,0 +1,56 @@
+<h1>Contact</h1>
+
+@if (submitted()) {
+  <p class="success" role="status">
+    Merci ! Votre message a bien été envoyé (simulation côté client).
+  </p>
+}
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form" novalidate>
+  <div class="field">
+    <label for="nom">Nom</label>
+    <input id="nom" type="text" class="input" formControlName="nom" />
+    @if (form.controls.nom.touched && form.controls.nom.errors) {
+      <span class="error-text">
+        @if (form.controls.nom.errors['required']) {
+          Le nom est obligatoire.
+        }
+        @if (form.controls.nom.errors['minlength']) {
+          Minimum 3 caractères.
+        }
+      </span>
+    }
+  </div>
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input id="email" type="email" class="input" formControlName="email" />
+    @if (form.controls.email.touched && form.controls.email.errors) {
+      <span class="error-text">
+        @if (form.controls.email.errors['required']) {
+          L'email est obligatoire.
+        }
+        @if (form.controls.email.errors['email']) {
+          Format d'email invalide.
+        }
+      </span>
+    }
+  </div>
+
+  <div class="field">
+    <label for="message">Message</label>
+    <textarea id="message" class="input" rows="5" formControlName="message"></textarea>
+    @if (form.controls.message.touched && form.controls.message.errors) {
+      <span class="error-text">
+        @if (form.controls.message.errors['required']) {
+          Le message est obligatoire.
+        }
+        @if (form.controls.message.errors['minlength']) {
+          Minimum 10 caractères.
+        }
+      </span>
+    }
+  </div>
+
+  <button type="submit" class="btn" [disabled]="form.invalid">Envoyer</button>
+</form>

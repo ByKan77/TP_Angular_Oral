@@ -1,0 +1,29 @@
+<h1>Lieux</h1>
+
+@if (state$ | async; as state) {
+  @if (state.loading) {
+    <app-loader />
+  } @else if (state.error) {
+    <app-error-message [message]="state.error" (retry)="reload()" />
+  } @else {
+    <ul class="list">
+      @for (loc of state.locations; track loc.id) {
+        <li>
+          <a [routerLink]="['/locations', loc.id]" class="list-item">
+            <h3>{{ loc.name }}</h3>
+            <p>{{ loc.type }} — {{ loc.dimension | truncate:60 }}</p>
+            <span class="meta">{{ loc.residents.length }} résident(s)</span>
+          </a>
+        </li>
+      }
+    </ul>
+    @if (state.info) {
+      <app-paginator
+        [currentPage]="currentPage()"
+        [totalPages]="state.info.pages"
+        (prev)="prevPage()"
+        (next)="nextPage()"
+      />
+    }
+  }
+}

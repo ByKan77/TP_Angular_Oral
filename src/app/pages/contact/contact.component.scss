@@ -1,0 +1,33 @@
+.contact-form {
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.error-text {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--danger);
+}
+
+.success {
+  padding: 1rem;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+}

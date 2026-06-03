@@ -1,0 +1,28 @@
+@if (state$ | async; as state) {
+  @if (state.loading) {
+    <app-loader />
+  } @else if (state.error || !state.location) {
+    <app-error-message [message]="state.error ?? 'Erreur'" (retry)="reload()" />
+  } @else {
+    @if (state.location; as loc) {
+      <header class="detail-header">
+        <h1>{{ loc.name }}</h1>
+        <p>{{ loc.type }} · {{ loc.dimension }}</p>
+      </header>
+
+      <section>
+        <h2>Résidents ({{ state.residents.length }})</h2>
+        <div class="grid">
+          @for (c of state.residents; track c.id) {
+            <app-character-card
+              [character]="c"
+              (toggleFavori)="favorisService.toggle($event)"
+            />
+          } @empty {
+            <p class="empty">Aucun résident connu.</p>
+          }
+        </div>
+      </section>
+    }
+  }
+}

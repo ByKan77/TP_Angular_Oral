@@ -1,0 +1,41 @@
+<h1>Tableau de bord</h1>
+<p class="subtitle">Vue d'ensemble de l'univers Rick &amp; Morty</p>
+
+@if (loading()) {
+  <app-loader />
+} @else if (error()) {
+  <app-error-message [message]="error()!" (retry)="loadStats()" />
+} @else {
+  @if (totals(); as t) {
+    <section class="stats-grid">
+      <article class="stat-card">
+        <span class="stat-card__value">{{ t.characters }}</span>
+        <span class="stat-card__label">Personnages</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-card__value">{{ t.locations }}</span>
+        <span class="stat-card__label">Lieux</span>
+      </article>
+      <article class="stat-card">
+        <span class="stat-card__value">{{ t.episodes }}</span>
+        <span class="stat-card__label">Épisodes</span>
+      </article>
+      <article class="stat-card stat-card--accent">
+        <span class="stat-card__value">{{ totalGeneral() }}</span>
+        <span class="stat-card__label">Total ressources</span>
+      </article>
+    </section>
+  }
+
+  <section class="favoris-stats">
+    <h2>Favoris</h2>
+    <p class="favoris-total">
+      <strong>{{ nombreFavoris() }}</strong> personnage(s) en favori
+    </p>
+    <ul class="repartition">
+      <li>🟢 Vivants : {{ repartitionFavoris().alive }}</li>
+      <li>🔴 Morts : {{ repartitionFavoris().dead }}</li>
+      <li>⚪ Inconnus : {{ repartitionFavoris().unknown }}</li>
+    </ul>
+  </section>
+}
