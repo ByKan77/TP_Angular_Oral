@@ -74,20 +74,22 @@ export class CharactersListComponent {
               info: res.info,
             })
           ),
+          catchError((err: unknown) => {
+            const detail =
+              err instanceof Error ? err.message : 'Erreur inconnue';
+            return of<CharactersListState>({
+              loading: false,
+              error: `Erreur lors du chargement des personnages (GraphQL) : ${detail}`,
+              characters: [],
+              info: null,
+            });
+          }),
           startWith<CharactersListState>({
             loading: true,
             error: null,
             characters: [],
             info: null,
-          }),
-          catchError(() =>
-            of<CharactersListState>({
-              loading: false,
-              error: 'Erreur lors du chargement des personnages (GraphQL).',
-              characters: [],
-              info: null,
-            })
-          )
+          })
         )
     )
   );
